@@ -2,7 +2,7 @@ FROM quay.io/3scale/base:trusty
 
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 136221EE520DDFAF0A905689B9316A7BC7917B12 \
  && echo 'deb http://ppa.launchpad.net/chris-lea/redis-server/ubuntu trusty main' > /etc/apt/sources.list.d/redis.list \
- && apt-install git cron supervisor logrotate \
+ && apt-install git cron logrotate \
                 make build-essential libpcre3-dev libssl-dev wget \
                 iputils-arping libexpat1-dev unzip curl
 
@@ -48,6 +48,4 @@ RUN wget -qO- http://luarocks.org/releases/luarocks-2.2.0.tar.gz | tar xvz -C /t
  && rm -rf /tmp/luarocks-*
 RUN luarocks install --verbose --server=http://luarocks.org/dev ngx-oauth
 
-ADD supervisor /etc/supervisor
-
-ONBUILD CMD ["supervisord", "-n"]
+CMD /opt/openresty/nginx/sbin/nginx -p /opt/app -c /etc/nginx/nginx.conf
